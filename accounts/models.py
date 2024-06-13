@@ -65,6 +65,10 @@ class Account(AbstractBaseUser):
 
     objects = MyAccountManager()
 
+
+    def full_name(self):
+        return f'{self.first_name} {self.last_name}'
+
     def __str__(self):
         return self.email
 
@@ -72,6 +76,7 @@ class Account(AbstractBaseUser):
     def has_perm(self, perm, obj=None):
         return self.is_admin
 
+    
 
     def has_module_perms(self, app_label):
         return True
