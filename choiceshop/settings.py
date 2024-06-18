@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-
+from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,10 +20,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-&w#)&q$tjn7(y8n$^7jq3&5*ajh7z8+6gu56k3+&v+3+d#5(qw'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool) #True
 
 ALLOWED_HOSTS = []
 
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'carts',
     'payment',
     'orders',
+    # 'admin_honeypot',
 
 
 
@@ -96,6 +97,9 @@ AUTH_USER_MODEL = 'accounts.Account'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+
+
+
 
 DATABASES = {
     'default': {
@@ -182,12 +186,15 @@ MESSAGE_TAGS = {
 
 
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT', cast=int)
 # Be sure to read the guide in the resources folder of this lecture (SETUP THE EMAIL BACKEND)
 
-EMAIL_HOST_USER = 'clothifyind@gmail.com' # - Enter your GMAIL address # The host email that sends password reset emails
-EMAIL_HOST_PASSWORD = 'mbnriubewhjxmida' # - Enter your app password 
-EMAIL_USE_TLS = True
+EMAIL_HOST_USER = config('EMAIL_HOST_USER') # - Enter your GMAIL address # The host email that sends password reset emails
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD') # - Enter your app password 
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
+
+
+
 
 

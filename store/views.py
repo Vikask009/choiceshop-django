@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from . models import Product, ReviewRating
+from . models import Product, ReviewRating, productGallery
 from category.models import Category
 
 from carts.models import CartItem, Cart
@@ -64,8 +64,10 @@ def product_detail(request, category_slug, product_slug):
     
     reviews = ReviewRating.objects.filter(product_id= single_product.id, status=True)
 
+    #Get the product gallery
+    product_gallery = productGallery.objects.filter(product_id=single_product.id)
 
-    context = {'single_product': single_product, 'in_cart': in_cart, 'orderproduct': orderproduct, 'reviews': reviews,}
+    context = {'single_product': single_product, 'in_cart': in_cart, 'orderproduct': orderproduct, 'reviews': reviews, 'product_gallery': product_gallery}
 
     return render(request, 'store/product_detail.html', context)
 
@@ -78,9 +80,10 @@ def search(request):
     if 'keyword' in request.GET:
         keyword = request.GET['keyword']
 
-        if keyword:
+        if keyword is not None:
             products = Product.objects.order_by('-created_date').filter(Q(description__icontains=keyword) | Q(product_name__icontains=keyword))
             product_count = products.count()
+
     
     context = {'products':products, 'product_count':product_count}
 
@@ -118,5 +121,13 @@ def submit_review(request, product_id):
                 data.save()
                 messages.success(request, 'Thank you, your review has been submited')
                 return redirect(url)
+
+
+
+
+
+
+
+
 
             
